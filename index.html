@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eda & Çağatay Ana Sayfası</title>
+  <title>Eda & Çağatay</title>
+  <script>
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; // senin UploadCare genel anahtarın
+  </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
     body {
@@ -14,99 +17,84 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      backdrop-filter: blur(3px);
     }
 
     .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding-top: 60px;
+      text-align: center;
+      max-width: 600px;
+      margin: 100px auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
     .top-photo {
-      width: 220px;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      width: 150px;
+      border-radius: 15px;
       margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 32px;
-      color: #7a2691;
-      margin: 10px 0 5px;
-    }
-
-    p.subtitle {
-      color: #444;
-      font-size: 16px;
-      margin-bottom: 20px;
+      margin-top: 0;
+      color: #800080;
     }
 
     textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      padding: 15px;
-      font-size: 16px;
+      width: 100%;
+      height: 120px;
+      padding: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      resize: none;
+      font-size: 16px;
     }
 
     button {
-      background-color: #a037b6;
+      margin-top: 20px;
+      background-color: #9b30ff;
       color: white;
+      padding: 12px 24px;
       border: none;
-      padding: 12px 25px;
+      border-radius: 10px;
       font-size: 16px;
-      border-radius: 8px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     button:hover {
-      background-color: #8e2aa1;
+      background-color: #7a1fe0;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <img src="couple_photo.jpeg" alt="Eda & Çağatay" class="top-photo">
+    <img src="couple_photo.jpeg" alt="Eda ve Çağatay" class="top-photo" />
     <h1>Eda & Çağatay</h1>
-    <p class="subtitle">Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
     <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
-    <button onclick="submitMemory()">
-      📸 Fotoğrafını Seç & Paylaş
-    </button>
+    <br />
+    <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
     function submitMemory() {
-      const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
       const comment = document.getElementById('comment').value;
 
-      fileInput.onUploadComplete(info => {
-        const fileUrl = info.cdnUrl;
-        const data = {
-          file: fileUrl,
-          comment: comment
-        };
-        alert("Anınız başarıyla yüklendi!\n" + (comment ? 'Yorum: ' + comment : ''));
-        document.getElementById('comment').value = '';
-        fileInput.value(null);
+      const widget = uploadcare.openDialog(null, {
+        imagesOnly: true,
+        multiple: false
       });
 
-      fileInput.openDialog();
+      widget.done(file => {
+        file.done(info => {
+          const imageUrl = info.cdnUrl;
+          alert(`🎉 Anı yüklendi!\nYorum: ${comment}\nFotoğraf URL: ${imageUrl}`);
+          document.getElementById('comment').value = '';
+        });
+      });
     }
   </script>
 
-  <input type="hidden" role="uploadcare-uploader" data-public-key="b373a1cc105a05708314" />
 </body>
 </html>
