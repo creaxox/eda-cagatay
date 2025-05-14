@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eda & Çağatay</title>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
@@ -15,104 +15,67 @@
       background-position: center;
       background-attachment: fixed;
     }
+
     .container {
-      max-width: 500px;
-      margin: 40px auto;
-      background-color: rgba(255, 255, 255, 0.85);
+      max-width: 600px;
+      margin: 80px auto;
       padding: 30px;
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
+
     .photo {
       width: 100%;
+      max-height: 400px;
+      object-fit: cover;
       border-radius: 12px;
       margin-bottom: 20px;
     }
+
     h1 {
-      color: #7b2cbf;
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-size: 32px;
+      color: #9333ea;
+      margin: 0;
     }
-    p {
-      color: #555;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
-      resize: vertical;
-    }
-    button {
-      background-color: #a020f0;
+
+    .upload-button {
+      margin-top: 25px;
+      background-color: #9333ea;
       color: white;
       border: none;
       padding: 12px 20px;
-      font-size: 16px;
       border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
+      transition: background-color 0.3s ease;
     }
-    button:hover {
-      background-color: #8a1bd6;
-    }
-    button img {
-      width: 20px;
-      margin-right: 8px;
+
+    .upload-button:hover {
+      background-color: #7e22ce;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" style="max-width:100%; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" class="photo">
     <h1>Eda & Çağatay</h1>
-    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
-    <textarea id="comment" rows="4" placeholder="Yorumunu buraya yaz..."></textarea><br />
-    <button onclick="submitMemory()">
-      <img src="https://img.icons8.com/emoji/48/camera-emoji.png"/> Fotoğrafını Seç & Paylaş
-    </button>
+    <p>Bu özel güne ait fotoğrafını bizimle paylaşmak ister misin? 🌿</p>
+    <button class="upload-button" onclick="openUploader()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
-    const uploadcareWidget = uploadcare.Widget('[role=uploadcare-uploader]');
-
-    function submitMemory() {
-      const comment = document.getElementById('comment').value;
-      const fileInput = uploadcare.openDialog(null, {
+    function openUploader() {
+      const widget = uploadcare.Widget.openDialog(null, {
+        publicKey: 'b373a1cc105a05708314', // Kendi public API anahtarın burası.
         imagesOnly: true,
-        crop: 'free'
+        multiple: false
       });
 
-      fileInput.done(function(file) {
-        file.done(function(info) {
-          const photoUrl = info.cdnUrl;
-
-          fetch('https://script.google.com/macros/s/AKfycbxmdaqtvvdbdRwJu5H3llUs6EUFZOrKF_2DR7Gn8QepKOMlWfzcTUQvZqtUzpHv9wZi/exec', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              photoUrl: photoUrl,
-              comment: comment
-            })
-          })
-          .then(response => response.text())
-          .then(result => {
-            alert('🎉 Anın başarıyla kaydedildi!');
-            document.getElementById('comment').value = '';
-          })
-          .catch(error => {
-            alert('Bir hata oluştu. Lütfen tekrar deneyin.');
-            console.error(error);
-          });
-        });
+      widget.done(function(fileInfo) {
+        alert("Önce yüklendi: \n" + fileInfo.cdnUrl);
+        console.log("Yüklenen dosya URL'si:", fileInfo.cdnUrl);
       });
     }
   </script>
