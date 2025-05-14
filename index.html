@@ -14,74 +14,77 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-    }
-
-    .photo-top {
-      display: flex;
-      justify-content: center;
-      margin-top: 40px;
-    }
-
-    .photo-top img {
-      max-width: 160px;
-      border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(3px);
     }
 
     .container {
-      text-align: center;
-      padding: 20px;
-      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 60px;
+    }
+
+    .top-photo {
+      width: 220px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
     }
 
     h1 {
       font-size: 32px;
-      color: #7d1893;
-      margin-bottom: 10px;
+      color: #7a2691;
+      margin: 10px 0 5px;
     }
 
-    p {
+    p.subtitle {
+      color: #444;
       font-size: 16px;
-      color: #333;
       margin-bottom: 20px;
     }
 
     textarea {
-      width: 100%;
+      width: 90%;
+      max-width: 500px;
       height: 100px;
       padding: 15px;
       font-size: 16px;
       border-radius: 10px;
       border: 1px solid #ccc;
-      resize: none;
       margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     button {
-      background-color: #a041c6;
-      color: #fff;
+      background-color: #a037b6;
+      color: white;
+      border: none;
       padding: 12px 25px;
       font-size: 16px;
-      border: none;
       border-radius: 8px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     button:hover {
-      background-color: #7d1893;
+      background-color: #8e2aa1;
     }
   </style>
 </head>
 <body>
-  <div class="photo-top">
-    <img src="couple_photo.jpeg" alt="Eda & Çağatay">
-  </div>
   <div class="container">
+    <img src="couple_photo.jpeg" alt="Eda & Çağatay" class="top-photo">
     <h1>Eda & Çağatay</h1>
-    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <p class="subtitle">Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
     <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
-    <br>
-    <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
+    <button onclick="submitMemory()">
+      📸 Fotoğrafını Seç & Paylaş
+    </button>
   </div>
 
   <script>
@@ -95,10 +98,7 @@
           file: fileUrl,
           comment: comment
         };
-
-        console.log("Yüklenen veri:", data);
-        alert('Anınız yüklendi! 💜\n' + (comment ? 'Yorumunuz: ' + comment : ''));
-
+        alert("Anınız başarıyla yüklendi!\n" + (comment ? 'Yorum: ' + comment : ''));
         document.getElementById('comment').value = '';
         fileInput.value(null);
       });
@@ -106,5 +106,7 @@
       fileInput.openDialog();
     }
   </script>
+
+  <input type="hidden" role="uploadcare-uploader" data-public-key="b373a1cc105a05708314" />
 </body>
 </html>
