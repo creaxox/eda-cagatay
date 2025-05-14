@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eda & Çağatay</title>
+  <script>
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; // senin UploadCare genel anahtarın
+  </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
     body {
@@ -17,67 +20,81 @@
     }
 
     .container {
-      max-width: 600px;
-      margin: 80px auto;
-      padding: 30px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       text-align: center;
+      max-width: 600px;
+      margin: 100px auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
-    .photo {
-      width: 100%;
-      max-height: 400px;
-      object-fit: cover;
-      border-radius: 12px;
+    .top-photo {
+      width: 150px;
+      border-radius: 15px;
       margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 32px;
-      color: #9333ea;
-      margin: 0;
+      margin-top: 0;
+      color: #800080;
     }
 
-    .upload-button {
-      margin-top: 25px;
-      background-color: #9333ea;
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #9b30ff;
       color: white;
+      padding: 12px 24px;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
-    .upload-button:hover {
-      background-color: #7e22ce;
+    button:hover {
+      background-color: #7a1fe0;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" class="photo">
+    <img src="couple_photo.jpeg" alt="Eda ve Çağatay" class="top-photo" />
     <h1>Eda & Çağatay</h1>
-    <p>Bu özel güne ait fotoğrafını bizimle paylaşmak ister misin? 🌿</p>
-    <button class="upload-button" onclick="openUploader()">📸 Fotoğrafını Seç & Paylaş</button>
+    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
+    <br />
+    <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
-    function openUploader() {
-      const widget = uploadcare.Widget.openDialog(null, {
-        publicKey: 'b373a1cc105a05708314', // Kendi public API anahtarın burası.
+    function submitMemory() {
+      const comment = document.getElementById('comment').value;
+
+      const widget = uploadcare.openDialog(null, {
         imagesOnly: true,
         multiple: false
       });
 
-      widget.done(function(fileInfo) {
-        alert("Önce yüklendi: \n" + fileInfo.cdnUrl);
-        console.log("Yüklenen dosya URL'si:", fileInfo.cdnUrl);
+      widget.done(file => {
+        file.done(info => {
+          const imageUrl = info.cdnUrl;
+          alert(`🎉 Anı yüklendi!\nYorum: ${comment}\nFotoğraf URL: ${imageUrl}`);
+          document.getElementById('comment').value = '';
+        });
       });
     }
   </script>
+
 </body>
 </html>
