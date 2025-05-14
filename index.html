@@ -10,95 +10,93 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-image: url('background_flowers_soft.png');
+      background-image: url('background_flowers_soft.jpeg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
     }
 
-    .card {
+    .container {
+      background-color: rgba(255, 255, 255, 0.85);
       max-width: 500px;
       margin: 60px auto;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.85);
+      padding: 30px;
       border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
       text-align: center;
     }
 
-    .photo {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      object-fit: cover;
+    .couple-photo {
+      width: 100%;
+      border-radius: 15px;
       margin-bottom: 20px;
-      border: 4px solid #fff;
     }
 
     h1 {
-      color: #6b1f88;
-      margin: 0 0 10px;
+      color: #7a259a;
+      margin-bottom: 10px;
     }
 
-    p {
-      font-size: 16px;
-      color: #555;
+    p.subtitle {
+      color: #333;
+      margin-bottom: 20px;
     }
 
     textarea {
       width: 100%;
       height: 100px;
-      margin: 20px 0;
       padding: 10px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       resize: none;
-      font-size: 14px;
-      font-family: 'Segoe UI', sans-serif;
+      margin-bottom: 15px;
     }
 
     button {
-      background-color: #9333ea;
+      background-color: #9c27b0;
       color: white;
-      border: none;
       padding: 12px 25px;
-      border-radius: 10px;
+      border: none;
+      border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
     button:hover {
-      background-color: #7e22ce;
+      background-color: #7b1fa2;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <img class="photo" src="https://ucarecdn.com/2c1d650a-81e4-4d4c-8b2e-22f92c4d0e67/" alt="Eda & Çağatay">
+  <div class="container">
+    <img src="couple_photo.jpeg" alt="Eda ve Çağatay" class="couple-photo">
     <h1>Eda & Çağatay</h1>
-    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
-    <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
+    <p class="subtitle">Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea><br>
     <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
-    const widget = uploadcare.Widget('[role=uploadcare-uploader]');
-
     function submitMemory() {
+      const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
       const comment = document.getElementById('comment').value;
-      const fileInput = uploadcare.openDialog(null, {
-        publicKey: 'b373a1cc105a05708314'
+
+      fileInput.onUploadComplete(info => {
+        const fileUrl = info.cdnUrl;
+        const data = {
+          file: fileUrl,
+          comment: comment
+        };
+
+        console.log("Yüklenen veri:", data);
+        alert('Anınız başarıyla yüklendi! 🎉\nYorum: ' + (comment || 'Yorum yok.'));
+
+        document.getElementById('comment').value = '';
+        fileInput.value(null);
       });
 
-      fileInput.done(function(file) {
-        file.done(function(info) {
-          const fileUrl = info.cdnUrl;
-          alert(`Anınız yüklendi! 📸\nYorumunuz: ${comment}`);
-          document.getElementById('comment').value = '';
-        });
-      });
+      fileInput.openDialog();
     }
   </script>
-</body>
-</html>
+
+  <input type="hidden" role="uploadcare-uploader" data-public-key="b
