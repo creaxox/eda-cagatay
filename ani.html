@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eda & Çağatay - Anı Yükle</title>
+  <script>
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
+  </script>
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff7f0, #fbeaff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #7b2cbf;
+    }
+    p {
+      color: #444;
+      margin-bottom: 1rem;
+    }
+    textarea {
+      width: 100%;
+      max-width: 400px;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: none;
+      margin-top: 1rem;
+    }
+    button {
+      background-color: #7b2cbf;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5a189a;
+    }
+  </style>
+</head>
+<body>
+  <h1>Eda & Çağatay'a Anını Paylaş</h1>
+  <p>Bu özel günün bir parçası olarak bir fotoğraf çek ve dilersen bir yorum bırak!</p>
+  <input type="hidden" role="uploadcare-uploader" data-clearable="true" data-tabs="camera file" id="fileInput">
+  <textarea id="comment" placeholder="Bu an hakkında ne söylemek istersin?"></textarea>
+  <button onclick="submitMemory()">Gönder</button>
+
+  <script>
+    function submitMemory() {
+      const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
+      const comment = document.getElementById('comment').value;
+
+      fileInput.onUploadComplete(info => {
+        const fileUrl = info.cdnUrl;
+        const data = {
+          file: fileUrl,
+          comment: comment
+        };
+
+        // Bu aşamada console log yerine webhook'a gönderilebilir
+        console.log("Yüklenen veri:", data);
+        alert("Anınız yüklendi! 💜\n" + (comment ? 'Yorumunuz: ' + comment : ''));
+
+        document.getElementById('comment').value = '';
+        fileInput.value(null);
+      });
+
+      fileInput.openDialog();
+    }
+  </script>
+</body>
+</html>
