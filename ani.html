@@ -3,66 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eda & Çağatay - Anı Yükle</title>
-  <script>
-    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
-  </script>
+  <title>Eda & Çağatay Anı Sayfası</title>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #fff7f0, #fbeaff);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       margin: 0;
-      padding: 1rem;
-      text-align: center;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('wedding_background_blurred.jpg');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(5px);
     }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
     h1 {
-      font-size: 2rem;
-      color: #7b2cbf;
-    }
-    p {
+      text-align: center;
       color: #444;
-      margin-bottom: 1rem;
+      margin-bottom: 10px;
     }
-    textarea {
+
+    p.desc {
+      text-align: center;
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    textarea, input[type="file"] {
       width: 100%;
-      max-width: 400px;
-      height: 100px;
       padding: 10px;
+      border-radius: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      resize: none;
-      margin-top: 1rem;
+      margin-bottom: 15px;
+      resize: vertical;
     }
+
     button {
-      background-color: #7b2cbf;
+      background-color: #8E44AD;
       color: white;
       border: none;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
+      padding: 12px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 16px;
       cursor: pointer;
+      transition: 0.3s;
     }
+
     button:hover {
-      background-color: #5a189a;
+      background-color: #732d91;
     }
   </style>
 </head>
 <body>
-  <h1>Eda & Çağatay'a Anını Paylaş</h1>
-  <p>Bu özel günün bir parçası olarak bir fotoğraf çek ve dilersen bir yorum bırak!</p>
-  <input type="hidden" role="uploadcare-uploader" data-clearable="true" data-tabs="camera file" id="fileInput">
-  <textarea id="comment" placeholder="Bu an hakkında ne söylemek istersin?"></textarea>
-  <button onclick="submitMemory()">Gönder</button>
+  <div class="container">
+    <h1>Eda & Çağatay</h1>
+    <p class="desc">Bu özel güne ait anını paylaşmak ister misin? 🕊️</p>
+    <textarea id="comment" placeholder="Yorumunu buraya yaz..." rows="4"></textarea>
+    <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
+  </div>
 
   <script>
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
+
     function submitMemory() {
       const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
       const comment = document.getElementById('comment').value;
@@ -74,9 +85,8 @@
           comment: comment
         };
 
-        // Bu aşamada console log yerine webhook'a gönderilebilir
         console.log("Yüklenen veri:", data);
-        alert("Anınız yüklendi! 💜\n" + (comment ? 'Yorumunuz: ' + comment : ''));
+        alert("💜 Anınız başarıyla yüklendi!\n\n📷 Fotoğraf: " + fileUrl + (comment ? "\n💬 Yorum: " + comment : ""));
 
         document.getElementById('comment').value = '';
         fileInput.value(null);
@@ -85,5 +95,7 @@
       fileInput.openDialog();
     }
   </script>
+
+  <input type="hidden" role="uploadcare-uploader" data-crop="disabled" data-clearable="true" data-images-only>
 </body>
 </html>
