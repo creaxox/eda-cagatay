@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eda & Çağatay</title>
-  
-  <!-- Uploadcare -->
-  <script>
-    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
-  </script>
+  <script>UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';</script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-
   <style>
     body {
       margin: 0;
@@ -66,14 +61,39 @@
     button:hover {
       background-color: #7b2cbf;
     }
+
+    #infoBox {
+      display: none;
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 20px;
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay">
+
     <h1>Eda & Çağatay</h1>
     <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+
+    <button onclick="toggleInfo()"> 💚 Nasıl Kullanılır?</button>
+    <div id="infoBox">
+      <strong>Adım Adım Anlatım:</strong>
+      <ol style="padding-left: 18px;">
+        <li>İsminizi yazınız.</li>
+        <li>Yorumunuzu ekleyiniz.</li>
+        <li>📸 <strong>Fotoğrafını Seç & Paylaş</strong> butonuna tıklayarak bir fotoğraf çekiniz veya galeriden seçiniz.</li>
+        <li>Fotoğraf yüklenene kadar bekleyiniz.</li>
+        <li>Fotoğraf yüklendikten sonra ekranın altında bir <strong>Gönder</strong> butonu belirecektir.</li>
+        <li>Gönder'e bastığınızda sistem "Anınız başarıyla gönderildi!" uyarısı verecektir.</li>
+        <li>"Tamam" ya da "Kapat" seçeneğine tıkladığınızda sayfa otomatik yenilenecektir.</li>
+      </ol>
+    </div>
 
     <input type="text" id="isim" placeholder="İsminizi yazınız..." required>
     <textarea id="yorum" placeholder="Yorumunuzu buraya yazınız..." required></textarea>
@@ -89,6 +109,11 @@
 
   <script>
     let fileUrl = '';
+
+    function toggleInfo() {
+      const info = document.getElementById("infoBox");
+      info.style.display = info.style.display === "none" ? "block" : "none";
+    }
 
     function openUploader() {
       const widget = uploadcare.Widget('[role=uploadcare-uploader]');
@@ -114,7 +139,6 @@
 
       fetch("https://script.google.com/macros/s/AKfycbxzngPcp7SHKNkaUOW1YdxffuUTrFOmZ6pbEfFlOL9hICnJX1pPjRwslUPnF2Bqisea/exec", {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "application/json"
         },
@@ -123,10 +147,14 @@
           yorum: yorum,
           fotoUrl: fileUrl
         })
+      })
+      .then(response => {
+        alert("Anınız başarıyla gönderildi!");
+        location.reload();
+      })
+      .catch(error => {
+        alert("Bir hata oluştu: " + error.message);
       });
-
-      alert("🎉 Anınız başarıyla gönderildi!");
-      location.reload();
     }
   </script>
 
