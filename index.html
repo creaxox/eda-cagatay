@@ -3,108 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eda & Çağatay - Anı Albümü</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: url('background_flowers_soft.png') no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      flex-direction: column;
-    }
-    .container {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      max-width: 400px;
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .container h2 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    input[type="text"], textarea {
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      width: 100%;
-    }
-    button {
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background-color: #d97777;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .top-image {
-      width: 250px;
-      height: auto;
-      margin-bottom: 15px;
-      border-radius: 20px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.3);
-    }
-  </style>
+  <title>Eda & Çağatay</title>
+
+  <!-- UploadCare Ayarı -->
   <script>
-    function handleSubmit(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const comment = document.getElementById('comment').value;
-      const fileUrl = uploadedFileUrl;
-
-      if (!name || !comment || !fileUrl) {
-        alert("Lütfen tüm alanları ve fotoğrafı doldurun.");
-        return;
-      }
-
-      fetch("https://script.google.com/macros/s/AKfycbwneWbKIxTQx24fcZnGXAkRy8u8hsX_x0jZ2b7bQlsBNicnDaNZpK8dWii8zjyqzuIBbw/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: name,
-          comment: comment,
-          photo: fileUrl
-        })
-      });
-
-      alert("Gönderildi! Anınız kaydedildi ❤️");
-      document.getElementById("albumForm").reset();
-      uploadedFileUrl = null;
-    }
-  </script>
-  <script>
-    let uploadedFileUrl = null;
     UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
   </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-</head>
-<body>
-  <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" class="top-image">
-  <form class="container" id="albumForm" onsubmit="handleSubmit(event)">
-    <h2>Eda & Çağatay’a Bir Anı Bırak ✨</h2>
-    <input type="text" id="name" placeholder="Adınız Soyadınız" required>
-    <textarea id="comment" rows="3" placeholder="Yorumunuzu yazın..." required></textarea>
-    <input type="hidden" role="uploadcare-uploader" data-clearable="true" data-tabs="file camera" data-crop="1:1" data-images-only>
-    <button type="submit">Gönder</button>
-  </form>
 
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('background_flowers_soft.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .top-image {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .top-image img {
+      max-width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.85);
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h1 {
+      color: #8126b3;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input, textarea {
+      width: 90%;
+      margin: 10px auto;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      font-size: 1em;
+      display: block;
+    }
+
+    button {
+      background-color: #8126b3;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #6b1f94;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Üstteki Görsel -->
+  <div class="top-image">
+    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay">
+  </div>
+
+  <!-- Form Kutusu -->
+  <div class="container">
+    <h1>Eda & Çağatay</h1>
+    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+
+    <input type="text" id="isim" placeholder="İsminizi yazınız..." required>
+    <textarea id="comment" placeholder="Yorumunuzu buraya yazınız..." required></textarea>
+    <input type="hidden" role="uploadcare-uploader">
+
+    <button onclick="submitMemory()">📷 Fotoğrafını Seç & Paylaş</button>
+  </div>
+
+  <!-- Script -->
   <script>
-    uploadcare.Widget('[role=uploadcare-uploader]').onUploadComplete(function(info) {
-      uploadedFileUrl = info.cdnUrl;
-    });
+    function submitMemory() {
+      const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+      const isim = document.getElementById("isim").value.trim();
+      const yorum = document.getElementById("comment").value.trim();
+
+      widget.onUploadComplete = function(info) {
+        const fotoUrl = info.cdnUrl;
+
+        fetch("https://script.google.com/macros/s/AKfycbxtg5fHOLVAnUI4tkkU97u6ERmao0ImlvlV1AsLar4bsE4KNdMwKt_8MKtns5vQ-6zF6w/exec", {
+          method: "POST",
+          body: JSON.stringify({
+            isim: isim,
+            yorum: yorum,
+            fotoUrl: fotoUrl
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => response.text())
+        .then(result => {
+          alert("Anınız başarıyla kaydedildi!");
+          document.getElementById("isim").value = "";
+          document.getElementById("comment").value = "";
+        })
+        .catch(error => {
+          alert("Bir hata oluştu: " + error);
+        });
+      };
+    }
   </script>
+
 </body>
 </html>
