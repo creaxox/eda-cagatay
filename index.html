@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eda & Çağatay</title>
-
-  <!-- UploadCare Anahtarı -->
-  <script>
-    UPLOADCARE_PUBLIC_KEY = "b373a1cc105a05708314";
-  </script>
+  <script>UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';</script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-
   <style>
     body {
       margin: 0;
@@ -18,117 +13,122 @@
       font-family: 'Segoe UI', sans-serif;
       background-image: url('background_flowers_soft.jpeg');
       background-size: cover;
-      background-attachment: fixed;
       background-position: center;
+      background-attachment: fixed;
     }
 
-    .form-container {
-      background-color: rgba(255, 255, 255, 0.85);
+    .container {
       max-width: 500px;
-      margin: 40px auto;
+      margin: 100px auto;
       padding: 30px;
-      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    .form-container img {
-      width: 250px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    h1 {
-      margin: 0;
-      color: #8e24aa;
-    }
-
-    p {
-      color: #444;
-      font-weight: 500;
+    .container img {
+      max-width: 300px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     input, textarea {
-      width: 90%;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 15px;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
       border: 1px solid #ccc;
-      border-radius: 6px;
       font-size: 1em;
+    }
+
+    #uploadSection {
+      display: none;
     }
 
     button {
-      background-color: #9c27b0;
+      background-color: #9226d3;
       color: white;
-      padding: 12px 20px;
+      padding: 12px 25px;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 15px;
       cursor: pointer;
+      font-size: 1em;
+      margin-top: 15px;
     }
 
     button:hover {
-      background-color: #7b1fa2;
+      background-color: #7b2cbf;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <!-- Eda & Çağatay Fotoğrafı -->
-    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" />
+
+  <div class="container">
+    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay">
 
     <h1>Eda & Çağatay</h1>
     <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
 
-    <!-- İsim Alanı -->
-    <input type="text" id="isim" placeholder="İsminizi yazınız..." required />
+    <input type="text" id="isim" placeholder="İsminizi yazınız..." required>
+    <textarea id="yorum" placeholder="Yorumunuzu buraya yazınız..." required></textarea>
 
-    <!-- Yorum Alanı -->
-    <textarea id="yorum" rows="3" placeholder="Yorumunuzu buraya yazınız..."></textarea>
+    <button onclick="openUploader()">📸 Fotoğrafını Seç & Paylaş</button>
 
-    <!-- UploadCare input -->
-    <input type="hidden" role="uploadcare-uploader" data-clearable />
-
-    <!-- Gönder Butonu -->
-    <button onclick="submitForm()">📸 Fotoğrafını Seç & Paylaş</button>
+    <div id="uploadSection">
+      <input type="hidden" role="uploadcare-uploader" id="fileUploader">
+      <br>
+      <button onclick="submitMemory()">Gönder</button>
+    </div>
   </div>
 
   <script>
-    function submitForm() {
-      const isim = document.getElementById("isim").value.trim();
-      const yorum = document.getElementById("yorum").value.trim();
-      const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
+    let fileUrl = '';
 
-      fileInput.openDialog(null, {
-        imagesOnly: true
+    function openUploader() {
+      const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+      widget.openDialog(null, {
+        imagesOnly: true,
+        crop: 'free'
       }).done(function(file) {
         file.done(function(info) {
-          const fotoUrl = info.cdnUrl;
-
-          // Google Script Webhook Linki
-          fetch("https://script.google.com/macros/s/AKfycbyxGA9LVPjctDYRsAbrZCEg9efAP-Lpjwa5a6SMQp7R3RxFXEIUwUaJuOQ_hxMCnC7QnQ/exec", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              isim: isim,
-              yorum: yorum,
-              fotoUrl: fotoUrl
-            }),
-          })
-          .then((res) => res.text())
-          .then((data) => {
-            alert("Gönderin başarıyla paylaşıldı!");
-            window.location.reload();
-          })
-          .catch((err) => {
-            alert("Bir hata oluştu: " + err.message);
-          });
+          fileUrl = info.cdnUrl;
+          document.getElementById('uploadSection').style.display = 'block';
         });
       });
     }
+
+    function submitMemory() {
+      const isim = document.getElementById('isim').value.trim();
+      const yorum = document.getElementById('yorum').value.trim();
+
+      if (!isim || !yorum || !fileUrl) {
+        alert("Lütfen tüm alanları doldurun ve bir fotoğraf seçin.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbzvFR1k4esgoIMC33xTW52HPQclfXo743yHNBAKzfwtpbxUoHE7R1zl6VbjqRtDHY9cuQ/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          isim: isim,
+          yorum: yorum,
+          fotoUrl: fileUrl
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Anınız başarıyla gönderildi!");
+        location.reload();
+      })
+      .catch(error => {
+        alert("Bir hata oluştu: " + error.message);
+      });
+    }
   </script>
+
 </body>
 </html>
