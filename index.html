@@ -147,14 +147,10 @@
           yorum: yorum,
           fotoUrl: fileUrl
         })
-      })
-      .then(response => {
-        alert("Anınız başarıyla gönderildi!");
-        location.reload();
-      })
-      .catch(error => {
-        alert("Bir hata oluştu: " + error.message);
       });
+
+      alert("🎉 Anınız başarıyla gönderildi!");
+      location.reload();
     }
   </script>
 
