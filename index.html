@@ -108,7 +108,8 @@
         return;
       }
 
-      const scriptURL = "https://script.google.com/macros/s/AKfycbwfrq-7s7qVLQvQhTRdj75UImHKdTeQMEshcdPcr3n9nvSqPDB_joqdHKONhRmKG20k/exec";
+      fetch("https://script.google.com/macros/s/AKfycbzvFR1k4esgoIMC33xTW52HPQclfXo743yHNBAKzfwtpbxUoHE7R1zl6VbjqRtDHY9cuQ/exec", {
+        method: "POST",
         method: "POST",
         body: JSON.stringify({
           isim: isim,
