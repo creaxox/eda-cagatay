@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eda & Çağatay</title>
+  
+  <!-- Uploadcare script -->
   <script>
-    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; // senin UploadCare genel anahtarın
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; 
   </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  
   <style>
     body {
       margin: 0;
@@ -20,81 +23,102 @@
     }
 
     .container {
-      text-align: center;
-      max-width: 600px;
-      margin: 100px auto;
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 0.85);
+      max-width: 500px;
+      margin: 80px auto;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .top-photo {
-      width: 150px;
-      border-radius: 15px;
-      margin-bottom: 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
     }
 
     h1 {
-      margin-top: 0;
-      color: #800080;
+      margin-bottom: 10px;
+      font-size: 28px;
+      color: #7b2cbf;
+    }
+
+    .description {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 20px;
     }
 
     textarea {
       width: 100%;
-      height: 120px;
+      height: 100px;
       padding: 10px;
-      border-radius: 10px;
       border: 1px solid #ccc;
+      border-radius: 6px;
       resize: none;
-      font-size: 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
     }
 
     button {
-      margin-top: 20px;
-      background-color: #9b30ff;
+      background-color: #a033c2;
       color: white;
-      padding: 12px 24px;
+      padding: 12px 20px;
       border: none;
-      border-radius: 10px;
-      font-size: 16px;
+      border-radius: 8px;
+      font-size: 15px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #7a1fe0;
+      background-color: #8e2bb1;
+    }
+
+    .photo {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="container">
-    <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay" class="top-photo" />
+    <img src="eda_cagatay.jpeg" alt="Eda & Çağatay" class="photo">
     <h1>Eda & Çağatay</h1>
-    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <p class="description">Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+
     <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
-    <br />
+    
+    <br /><br />
     <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
     function submitMemory() {
       const comment = document.getElementById('comment').value;
+      const widget = uploadcare.Widget('[role=uploadcare-uploader]');
+      
+      widget.onUploadComplete(info => {
+        const fileUrl = info.cdnUrl;
+        const data = {
+          yorum: comment,
+          fotoUrl: fileUrl
+        };
 
-      const widget = uploadcare.openDialog(null, {
-        imagesOnly: true,
-        multiple: false
-      });
-
-      widget.done(file => {
-        file.done(info => {
-          const imageUrl = info.cdnUrl;
-          alert(`🎉 Anı yüklendi!\nYorum: ${comment}\nFotoğraf URL: ${imageUrl}`);
-          document.getElementById('comment').value = '';
+        fetch("https://script.google.com/macros/s/AKfycbxa6RbImwP35l3dEErzs-vTtPwNStKioyWGIjLk_tt2hWjQadYxm4gkLvMEOL33qalm-w/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
+
+        alert("🎉 Anın kaydedildi!");
+        document.getElementById('comment').value = "";
       });
+
+      widget.openDialog();
     }
   </script>
 
+  <!-- Gizli yükleyici (görünmeyen) -->
+  <input type="hidden" role="uploadcare-uploader" data-clearable="true" />
 </body>
 </html>
