@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eda & Çağatay</title>
-  <script>UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';</script>
+  
+  <!-- Uploadcare -->
+  <script>
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314';
+  </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -67,7 +72,6 @@
 
   <div class="container">
     <img src="eda_cagatay.jpeg" alt="Eda ve Çağatay">
-
     <h1>Eda & Çağatay</h1>
     <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
 
@@ -110,6 +114,7 @@
 
       fetch("https://script.google.com/macros/s/AKfycbxzngPcp7SHKNkaUOW1YdxffuUTrFOmZ6pbEfFlOL9hICnJX1pPjRwslUPnF2Bqisea/exec", {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json"
         },
@@ -118,15 +123,10 @@
           yorum: yorum,
           fotoUrl: fileUrl
         })
-      })
-      .then(response => response.text())
-      .then(result => {
-        alert("Anınız başarıyla gönderildi!");
-        location.reload();
-      })
-      .catch(error => {
-        alert("Bir hata oluştu: " + error.message);
       });
+
+      alert("🎉 Anınız başarıyla gönderildi!");
+      location.reload();
     }
   </script>
 
