@@ -109,16 +109,17 @@
       }
 
       fetch("https://script.google.com/macros/s/AKfycbxvWGABBT2jTnvhVU769IGvqY8QmqhfIhCdiZBpypYB4y0NDywHxPscsjJQVKpLZP8-/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          isim: isim,
-          yorum: yorum,
-          fotoUrl: fileUrl
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    isim: isim,
+    yorum: yorum,
+    fotoUrl: fileUrl
+  })
+});
       .then(response => response.text())
       .then(result => {
         alert("Anınız başarıyla gönderildi!");
