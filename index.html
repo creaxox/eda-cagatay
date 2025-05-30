@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eda & Çağatay</title>
-  
-  <!-- Uploadcare script -->
   <script>
-    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; 
+    UPLOADCARE_PUBLIC_KEY = 'b373a1cc105a05708314'; // kendi anahtarın
   </script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-  
   <style>
     body {
       margin: 0;
@@ -23,102 +20,103 @@
     }
 
     .container {
-      background-color: rgba(255, 255, 255, 0.85);
-      max-width: 500px;
-      margin: 80px auto;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.85);
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       text-align: center;
     }
 
     h1 {
-      margin-bottom: 10px;
-      font-size: 28px;
       color: #7b2cbf;
+      font-size: 2em;
     }
 
-    .description {
-      font-size: 15px;
-      color: #444;
+    p {
       margin-bottom: 20px;
+      font-weight: 500;
     }
 
-    textarea {
-      width: 100%;
-      height: 100px;
+    input, textarea {
+      width: 90%;
       padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      resize: none;
-      margin-bottom: 20px;
-      font-size: 14px;
+      font-size: 1em;
     }
 
     button {
-      background-color: #a033c2;
-      color: white;
-      padding: 12px 20px;
+      padding: 12px 30px;
+      background-color: #9d4edd;
+      color: #fff;
       border: none;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 1em;
       cursor: pointer;
+      margin-top: 15px;
     }
 
     button:hover {
-      background-color: #8e2bb1;
-    }
-
-    .photo {
-      width: 100%;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      background-color: #7b2cbf;
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-    <img src="eda_cagatay.jpeg" alt="Eda & Çağatay" class="photo">
     <h1>Eda & Çağatay</h1>
-    <p class="description">Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
+    <p>Bu özel güne ait anını paylaşmak ister misin? 🌿</p>
 
-    <textarea id="comment" placeholder="Yorumunu buraya yaz..."></textarea>
-    
-    <br /><br />
+    <input type="text" id="isim" placeholder="İsminizi yazınız..." required>
+    <textarea id="comment" placeholder="Yorumunu buraya yaz..." required></textarea>
+    <br>
     <button onclick="submitMemory()">📸 Fotoğrafını Seç & Paylaş</button>
   </div>
 
   <script>
     function submitMemory() {
-      const comment = document.getElementById('comment').value;
-      const widget = uploadcare.Widget('[role=uploadcare-uploader]');
-      
-      widget.onUploadComplete(info => {
-        const fileUrl = info.cdnUrl;
+      const fileInput = uploadcare.Widget('[role=uploadcare-uploader]');
+      const isim = document.getElementById('isim').value.trim();
+      const yorum = document.getElementById('comment').value.trim();
+
+      if (!isim || !yorum) {
+        alert("Lütfen isim ve yorum alanlarını doldurunuz.");
+        return;
+      }
+
+      fileInput.openDialog(null, {
+        imagesOnly: true,
+        multiple: false
+      }).done(fileInfo => {
+        const fileUrl = fileInfo.cdnUrl;
+
         const data = {
-          yorum: comment,
+          isim: isim,
+          yorum: yorum,
           fotoUrl: fileUrl
         };
 
         fetch("https://script.google.com/macros/s/AKfycbxa6RbImwP35l3dEErzs-vTtPwNStKioyWGIjLk_tt2hWjQadYxm4gkLvMEOL33qalm-w/exec", {
           method: "POST",
-          mode: "no-cors",
+          body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-
-        alert("🎉 Anın kaydedildi!");
-        document.getElementById('comment').value = "";
+          }
+        })
+        .then(res => res.text())
+        .then(response => {
+          alert("Anı başarıyla paylaşıldı! 💜");
+          document.getElementById('isim').value = "";
+          document.getElementById('comment').value = "";
+        })
+        .catch(err => alert("Bir hata oluştu: " + err));
       });
-
-      widget.openDialog();
     }
   </script>
 
-  <!-- Gizli yükleyici (görünmeyen) -->
-  <input type="hidden" role="uploadcare-uploader" data-clearable="true" />
+  <!-- Uploadcare gizli input -->
+  <input type="hidden" role="uploadcare-uploader">
 </body>
 </html>
